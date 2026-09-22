@@ -1,1 +1,40 @@
+#HaplotypeCaller
 
+#GenomicsDBImport
+
+#GenotypeGVCFs
+
+#GatherVcfs
+gatk GatherVcfs --java-options "-Xmx8G"\
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223112.1_1_177637061.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223112.1_177637062_355274122.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223113.1_1_136127960.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223113.1_136127961_272255920.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223114.1_1_106216710.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223114.1_106216711_212433421.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223115.1_1_150161704.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223116.1_1_137258246.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223117.1_1_131075015.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223118.1_1_126826780.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223119.1_1_109072606.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223120.1_1_103789949.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223121.1_1_85838826.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223122.1_1_80733676.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223123.1_1_43501221.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223124.1_1_42056719.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223125.1_1_46329096.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223126.1_1_35482556.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223127.1_1_28488247.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223128.1_1_26183582.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223129.1_1_30688577.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223130.1_1_20304672.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223131.1_1_22212431.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223132.1_1_21257661.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223133.1_1_21970794.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223134.1_1_15285978.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223135.1_1_19396635.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223136.1_1_19974150.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223137.1_1_19549198.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223138.1_1_19522081.vcf.gz \
+  -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223139.1_1_7529980.vcf.gz \
+  -O /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivacea.vcf
