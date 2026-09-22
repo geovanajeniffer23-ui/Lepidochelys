@@ -1,4 +1,4 @@
-##################  Quality filters  ##################
+###########################################################  Quality filters  ###########################################################
 
 #Hard filters GATK
 gatk VariantFiltration \
@@ -76,7 +76,7 @@ awk '$3 <= 0.7 {print $1"\t"$2}' L.olivacea_6_het_pop.txt > L.olivacea_6_het_pop
 
 bcftools view -T L.olivacea_6_het_pop_abaixo_de_0.7.txt L.olivacea_6.vcf.gz -Oz -o L.olivacea_7.vcf.gz 
 
-##################  Filters to VCF 1 (Population genetic structure)  ##################
+########################################  Filters to VCF 1 (Population genetic structure)  ###########################################
 
 #Outgroup removal
 bcftools view --samples ^Sample65,Sample66 -Oz -o L.olivacea_8.vcf.gz L.olivacea_7.vcf.gz
@@ -152,7 +152,7 @@ rm L.olivacea_11_Pacifico.vcf.gz
 
 mv L.olivacea_11_Pacifico_AC_AN_filtrado.vcf.gz L.olivacea_11_Pacifico.vcf.gz
 
-##################  Filters to VCF 2 (Genetic Diversity)  ##################
+########################################  Filters to VCF 2 (Genetic Diversity)  ########################################
 
 #Remove samples with coverage below 10×
 bcftools view \
@@ -168,7 +168,7 @@ rm L.olivacea_12.vcf.gz
 
 mv L.olivacea_12_AC_AN_filtrado.vcf.gz L.olivacea_12.vcf.gz
 
-##################  Filters to VCF 3 (Genetic Load)  ##################
+########################################  Filters to VCF 3 (Genetic Load)  ########################################
 
 #Missing
 vcftools --gzvcf L.olivacea_12.vcf.gz \
