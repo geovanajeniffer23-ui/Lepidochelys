@@ -41,3 +41,37 @@ gatk --java-options "-Xmx8G" SelectVariants \
 --tmp-dir /media/labgenoma5/DATAPART4/ortela/tmp \
 -O L.olivacea_5.vcf.gz
 
+#Callable regions --> Genmap and Repetitive regions
+#Genmap
+genmap index -F /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic.fasta -I /media/labgenoma5/DATAPART4/ortela/Genmap/L.olivacea
+
+genmap map -K 150 -E 4 -I /media/labgenoma5/DATAPART4/ortela/Genmap/L.olivacea_genmap -O /media/labgenoma5/DATAPART4/ortela/Genmap/L.olivacea_genmap/L.olivacea_output -t -w -bg -T 10
+
+awk '$4==1 {print $1"\t"$2"\t"$3}' L.olivacea_output.bedgraph > mappability.bed
+
+#Repetitive regions
+bgzip -d GCA_965140295.1.repeatMasker.out.gz
+
+cat GCA_965140295.1.repeatMasker.out | tail -n +4 > GCA_965140295.1.repeatMasker_sem_header.out
+
+cat GCA_965140295.1.repeatMasker_sem_header.out | awk '{print $5"\t"$6"\t"$7}' > L.olivacea_repetitive_regions.bed 
+
+awk -F '\t' -v OFS='\t' '{ $(NF+1) = 1; print }' L.olivacea_repetitive_regions.bed > L.olivacea_repetitive_regions.set
+
+bedtools subtract -a /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/Genmap/mappability.bed /
+-b /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/Regiões_repetitivas/L.olivacea_repetitive_regions.bed /
+> regiões_confiáveis.bed   
+
+bcftools view -R /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed -Oz -o L.olivacea_6.vcf.gz L.olivacea_5.vcf.gz
+
+#Heterozygosity filters
+bcftools +fill-tags L.olivacea_6.vcf.gz -Oz -o L.olivacea_6_AC_het.vcf.gz -- -t AC,AN,AC_Het 
+rm L.olivacea_6.vcf.gz
+mv L.olivacea_6_AC_het.vcf.gz L.olivacea_6.vcf.gz
+
+bcftools query -f '%CHROM\t%POS\t%INFO/AC_Het\t%INFO/AN\n' L.olivacea_6.vcf.gz | \
+awk '{print $1"\t"$2"\t"$3/($4/2)}' > L.olivacea_6_het_pop.txt
+
+awk '$3 <= 0.7 {print $1"\t"$2}' L.olivacea_6_het_pop.txt > L.olivacea_6_het_pop_abaixo_de_0.7.txt
+
+bcftools view -T L.olivacea_6_het_pop_abaixo_de_0.7.txt L.olivacea_6.vcf.gz -Oz -o L.olivacea_7.vcf.gz 
