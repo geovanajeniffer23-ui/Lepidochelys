@@ -1,2 +1,43 @@
-#Filter of quality
+##################  Quality filters  ##################
+
+#Hard filters GATK
+gatk VariantFiltration \
+-V L.olivacea.vcf.gz \
+-filter "QD < 2.0" --filter-name "QD2" \
+-filter "QUAL < 60.0" --filter-name "QUAL60" \
+-filter "FS > 60.0" --filter-name "FS60" \
+-filter "MQ < 40.0" --filter-name "MQ40" \
+-filter "MQRankSum < -20.0" --filter-name "MQRankSum-20" \
+-filter "ReadPosRankSum < -8.0" --filter-name "ReadPosRankSum-8" \
+--tmp-dir /media/labgenoma5/DATAPART4/ortela/tmp \
+-O L.olivacea_filters.vcf.gz
+
+gatk SelectVariants -V L.olivacea_filters.vcf.gz --exclude-filtered true -O L.olivacea_2.vcf.gz --tmp-dir /media/labgenoma5/DATAPART4/ortela/tmp
+
+#Coverage filters
+vcftools --gzvcf L.olivacea_2.vcf.gz  \
+--out L.olivacea_3 \
+--minDP 4 \
+--maxDP 70 \
+--min-meanDP 4 \
+--max-meanDP 61 \
+--recode --recode-INFO-all
+
+#Indel filter
+bcftools view -v indels L.olivacea_3.vcf.gz -Oz -o L.olivacea_3_indels.vcf.gz
+
+bcftools query -f '%CHROM\t%POS0\t%END\n' L.olivacea_3_indels.vcf.gz > L.olivacea_3_indels.bed
+
+bedtools slop -i L.olivacea_3_indels.bed -g /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic_tamanho_dos_cromossomos.txt -b 5 > L.olivacea_3_indels_5pb.bed
+
+bcftools view -T ^L.olivacea_3_indels_5pb.bed -Oz -o L.olivacea_4.vcf.gz L.olivacea_3.vcf.gz
+
+#Biallelic SNPs
+gatk --java-options "-Xmx8G" SelectVariants \
+-R /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic.fasta \
+-V L.olivacea_4.vcf.gz \
+--select-type-to-include SNP \
+--restrict-alleles-to BIALLELIC \
+--tmp-dir /media/labgenoma5/DATAPART4/ortela/tmp \
+-O L.olivacea_5.vcf.gz
 
