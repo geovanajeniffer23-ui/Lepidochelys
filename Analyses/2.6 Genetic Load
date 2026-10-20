@@ -499,3 +499,39 @@ Pacifico_low_homo <- sapply(Pacifico_low, function(column) sum(grepl("1\\|1", co
 print(Pacifico_low_het)
 print(Pacifico_low_homo)
 
+# Calculation of p-values using the Mann–Whitney U test (MWU)
+# High deleter
+Atlantico_High_mascarada <- c(29, 27, 26, 27, 27, 15, 31, 30, 36, 35, 28, 29, 28, 28, 25, 26, 24, 24, 24, 27, 29, 30, 29)
+Indico_High_mascarada <- c(36, 43, 34, 37, 45, 37, 50, 42, 43)
+Pacifico_High_mascarada <- c(27, 40, 42, 40, 43, 38, 37)
+
+wilcox.test(Atlantico_High_mascarada, Pacifico_High_mascarada,exact = FALSE)
+
+wilcox.test(Atlantico_High_mascarada, Indico_High_mascarada, exact = FALSE) 
+
+wilcox.test(Pacifico_High_mascarada, Indico_High_mascarada, exact = FALSE) 
+
+Atlantico_High_realizada <- c(18, 19, 21, 20, 19, 25, 20, 16, 17, 10, 23, 20, 15, 17, 21, 20, 24, 17, 18, 20, 19, 21, 20)
+Indico_High_realizada <- c(16, 13, 21, 17, 12, 12, 15, 18, 12)
+Pacifico_High_realizada <- c(16, 13, 10, 11, 8, 11, 12)
+
+wilcox.test(Atlantico_High_realizada, Pacifico_High_realizada,exact = FALSE)
+
+wilcox.test(Atlantico_High_realizada, Indico_High_realizada, exact = FALSE) 
+
+wilcox.test(Pacifico_High_realizada, Indico_High_realizada, exact = FALSE) 
+
+
+Atlantico_High_Total <- c(47, 46, 47, 47, 46, 40, 51, 46, 53, 45, 51, 49, 43, 45, 46, 46, 48, 41, 42, 47, 48, 51, 49)
+Indico_High_Total <- c(52, 56, 55, 54, 57, 49, 65, 60, 55)
+Pacifico_High_Total <- c(43, 53, 52, 51, 51, 49, 49)
+
+wilcox.test(Atlantico_High_Total, Pacifico_High_Total,exact = FALSE)
+
+wilcox.test(Atlantico_High_Total, Indico_High_Total, exact = FALSE) 
+
+wilcox.test(Pacifico_High_Total, Indico_High_Total, exact = FALSE) 
+
+# Other genetic load categories ...
+
+################################################################ Functional Enrichment ################################################################
