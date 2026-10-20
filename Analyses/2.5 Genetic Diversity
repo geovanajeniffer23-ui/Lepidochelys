@@ -1,1 +1,5 @@
-
+# Total heterozygosity
+vcftools --gzvcf L.olivacea_9.vcf.gz \
+--minDP 4 \
+--het \
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivacea_9_het_por_amostra
