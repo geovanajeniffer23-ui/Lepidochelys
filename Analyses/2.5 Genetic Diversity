@@ -60,3 +60,10 @@ wilcox.test(Atlantico_Het_Genico, Indico_Het_Genico)
 wilcox.test(Pacifico_Genico, Indico_Het_Genico)
 
 ################################################################ ROHS ################################################################
+
+plink --allow-extra-chr \
+--vcf L.olivacea_9.vcf.gz \
+--make-bed \
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/ROHs/L.olivacea_9 \
+--threads 10 \
+--memory 4000
