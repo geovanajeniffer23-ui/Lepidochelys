@@ -96,4 +96,18 @@ LC_NUMERIC=C awk '
 }' MODIFICADO_output-file-pvalues.txt > ancestral_states.txt
 
 ################################################################ Ancestralizing FASTA and VCF files ################################################################
-Ancestralizing FASTA
+
+########## Ancestralizing FASTA ##########
+
+# Generate a file containing the positions of the variants
+bcftools query -f '%CHROM\t%POS\n' \
+  /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivacea_13.vcf > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/positions.txt
+
+# Combine with the ancestral allele inferred by est-sfs
+paste positions.txt ancestral_states.txt > ancestral_positions.txt  
+
+# Modify the reference genome by replacing the alleles at the specified positions with the ancestral alleles inferred by est-sfs, 
+# while preserving the rest of the genome. This modified reference genome will be used to ancestralize the VCF file and construct 
+# the libraries for genetic load estimation.
+
+# 
