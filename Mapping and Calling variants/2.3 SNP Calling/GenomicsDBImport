@@ -1,1 +1,9 @@
+# Run it for each interval used
 
+gatk --java-options "-Xmx4g -Xms4g" \
+       GenomicsDBImport \
+       --genomicsdb-workspace-path /media/labgenoma5/Expansion/L.olivacea/GVCF_combinados_Genomics_DBImport/OZ223112.1_1_177637061 \
+       -L OZ223112.1:1-177637061 \
+       --sample-name-map /media/labgenoma5/Expansion/L.olivacea/GVCF/samplelist/OZ223112.1_1_177637061.txt \
+       --tmp-dir /media/labgenoma5/DATAPART4/ortela/tmp \
+       --reader-threads 6
