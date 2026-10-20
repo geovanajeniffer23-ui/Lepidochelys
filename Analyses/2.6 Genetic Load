@@ -210,7 +210,7 @@ mv L.olivacea_13_REF_ANCESTRAL_SEM_OUTGROUP_AC_AN.vcf.gz L.olivacea_13_REF_ANCES
 
 ########## snpEff ##########
 
-# BUILD A snpEff DATABASE
+# Build a snpEff database
 #Create a directory inside the snpEff 'data' folder, using the name of the annotated database
 mkdir /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea
 
@@ -246,3 +246,139 @@ awk -F'\t' 'BEGIN {OFS="\t"} /^#/ {print; next} $8 ~ /LOW/' \
 /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/Low_deleter/L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_LOW_DELETER.vcf.gz 
 
 # For each population, generate the genotype of each variant for every individual, so that the variants can be counted in subsequent analyses
+# High impact
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_HIGH_DELETER.vcf.gz | awk '{
+  for (i=10; i<=48; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $11, $12, $15, $17, $31, $40, $48;
+}' > Pacifico_High_deleter.txt
+
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_HIGH_DELETER.vcf.gz | awk '{
+  for (i=10; i<=48; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $10, $13, $14, $18, $19, $20, $21, $22, $23;
+}' > Indico_High_deleter.txt
+
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_HIGH_DELETER.vcf.gz | awk '{
+  for (i=10; i<=48; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $16, $24, $25, $26, $27, $28, $29, $30, $32, $33, $34, $35, $36, $37, $38, $39, $41, $42, $43, $44, $45, $46, $47;
+}' > Atlantico_High_deleter.txt
+
+# LOW impact
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_LOW_DELETER.vcf.gz  | awk '{
+  for (i=10; i<=48; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $11, $12, $15, $17, $31, $40, $48;
+}' > Pacifico_Low_deleter.txt
+
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_LOW_DELETER.vcf.gz  | awk '{
+  for (i=10; i<=48; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $10, $13, $14, $18, $19, $20, $21, $22, $23;
+}' > Indico_Low_deleter.txt
+
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_LOW_DELETER.vcf.gz  | awk '{
+  for (i=10; i<=48; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $16, $24, $25, $26, $27, $28, $29, $30, $32, $33, $34, $35, $36, $37, $38, $39, $41, $42, $43, $44, $45, $46, $47;
+}' > Atlantico_Low_deleter.txt
+
+########## sift4g ##########
+
+# As for the MODERATE impact, we want to verify that the mutations are properly deleterious
+
+# Build a sift4g database
+cp homo_sapiens-test.txt <L.olivacea.txt>
+
+# Download the PROTEIN_DB
+wget https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+gunzip uniprot_sprot.fasta.gz
+
+# Create the following directories
+mkdir L.olivacea
+mkdir L.olivacea/gene-annotation-src
+mkdir L.olivacea/chr-src
+mkdir L.olivacea/dbSNP
+
+# Copy the files to their corresponding directories
+mv /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/Fasta_ancestralizado/fasta_ancestralizado.fasta L.olivacea/chr-src
+mv media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCF_965140295.1_rLepOli2.hap1_genomic.gtf.gz L.olivacea/gene-annotation-src
+
+#  Build a sift4g database
+perl make-SIFT-db-all.pl -config /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/SIFT4G/L.olivacea/L.olivacea.txt
+
+# Annotate the VCF file
+java -Djava.awt.headless=true -jar /media/labgenoma5/DATAPART4/ortela/softwares/sift4g/SIFT4G_Annotator.jar \
+		-c \
+		-i /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/Moderate_deleter/L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETER.vcf \
+		-d /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/SIFT4G/L.olivacea/Ancestralizado \
+		-r /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/Moderate_deleter/Results_SIFT4G \
+		-t
+
+# Filter keeping DELETERIOUS and TOELRATED variants (both MODERATE)
+awk -F'\t' 'BEGIN {OFS="\t"} /^#/ {print; next} $8 ~ /DELETERIOUS/' L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETER_SIFTpredictions.vcf > \
+L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_SNPEFF_MODERATE_DELETERIOUS.vcf
+
+awk -F'\t' 'BEGIN {OFS="\t"} /^#/ {print; next} $8 ~ /TOLERATED/' L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETER_SIFTpredictions.vcf > \
+L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_TOLERATED.vcf
+
+# Since the 'DELETERIOUS' category can also include low-confidence variants, generate a separate file containing only variants classified as 'DELETERIOUS (*WARNING! Low confidence)'
+awk -F'\t' 'BEGIN {OFS="\t"} /^#/ {print; next} $8 ~ /Low confidence/' L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETER_SIFTpredictions.vcf > L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETERIOUS_WARM.vcf
+
+# Remove low-confidence positions from the 'DELETERIOUS' file
+bcftools view -T ^L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETERIOUS_WARM.vcf \
+  L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_SNPEFF_MODERATE_DELETERIOUS.vcf \
+  -Oz -o  L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETERIOUS_sem_Low_Confidence.vcf.gz
+
+# For each population, generate the genotype of each variant for every individual, so that the variants can be counted in subsequent analyses
+# MODERATE DELETERIOUS impact
+
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETERIOUS_sem_Low_Confidence.vcf.gz | awk '{
+  for (i=10; i<=50; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $11, $12, $15, $17, $31, $40, $48;
+}' > Pacifico_mod_deleter_DELETERIOUS.txt
+
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETERIOUS_sem_Low_Confidence.vcf.gz | awk '{
+  for (i=10; i<=50; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $10, $13, $14, $18, $19, $20, $21, $22, $23;
+}' > Indico_mod_deleter_DELETERIOUS.txt
+
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETERIOUS_sem_Low_Confidence.vcf.gz | awk '{
+  for (i=10; i<=50; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $16, $24, $25, $26, $27, $28, $29, $30, $32, $33, $34, $35, $36, $37, $38, $39, $41, $42, $43, $44, $45, $46, $47;
+}' > Atlantico_mod_deleter_DELETERIOUS.txt
+
+# MODERATE TOLERATED impact
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_TOLERATED.vcf | awk '{
+  for (i=10; i<=50; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $11, $12, $15, $17, $31, $40, $48;
+}' > Pacifico_mod_deleter_TOLERATED.txt
+
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_TOLERATED.vcf | awk '{
+  for (i=10; i<=50; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $10, $13, $14, $18, $19, $20, $21, $22, $23;
+}' > Indico_mod_deleter_TOLERATED.txt
+
+zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_TOLERATED.vcf | awk '{
+  for (i=10; i<=50; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $16, $24, $25, $26, $27, $28, $29, $30, $32, $33, $34, $35, $36, $37, $38, $39, $41, $42, $43, $44, $45, $46, $47;
+}' > Atlantico_mod_deleter_TOLERATED.txt
