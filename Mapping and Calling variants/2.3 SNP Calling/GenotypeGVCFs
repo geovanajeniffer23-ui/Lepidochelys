@@ -1,1 +1,7 @@
+#
 
+gatk --java-options "-Xmx3G" GenotypeGVCFs \
+  -R /media/labgenoma5/DATAPART4/ortela/GCA_965140295.1_rLepOli2.hap1_genomic.fasta \
+  -V gendb:///media/labgenoma5/Expansion/L.olivacea/GVCF/GVCF_combinados_GenomicsDBImport/OZ223114.1_106216711_212433421 \
+  -O /media/labgenoma5/DATAPART4/ortela/Novo_seq/VCF/L.olivacea_OZ223114.1_106216711_212433421.vcf.gz \
+  --tmp-dir /media/labgenoma5/DATAPART4/ortela/tmp
