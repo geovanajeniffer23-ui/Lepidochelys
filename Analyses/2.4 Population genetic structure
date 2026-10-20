@@ -1,1 +1,9 @@
+################################################################ PCA ################################################################
 
+##Gerar o arquivo de input do Plink
+plink --vcf L.olivacea_18_Pacifico.vcf.gz  --double-id --allow-extra-chr --make-bed --out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/PCA/Pacifico/L.olivacea_18_Pacifico --threads 10 --memory 8000
+
+#Rodar a PCA
+plink --bfile L.olivacea_18_Pacifico --pca 10 --out L.olivacea_18_Pacifico --allow-extra-chr  --threads 10 --memory 8000
+
+#### ADMIXTURE ####
