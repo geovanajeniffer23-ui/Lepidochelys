@@ -1,1 +1,16 @@
+# Script modified from Battilani et al. 2025 (https://datadryad.org/landing/show?id=doi%3A10.5061%2Fdryad.ngf1vhj2f)
 
+# Generating input files for the est-sfs software
+
+# Process the VCF file by converting genotypes of the target population (L. olivacea) in columns 10–48 and 51 into their corresponding alleles from columns 4 and 5,
+# and extracting columns 10–48 and 51, retaining only the genotype information before the first : in each sample column.
+  grep -v "#" /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/VCF/L.olivacea_14.vcf | awk '{
+  for (i=10; i<=50; i++) {
+    gsub(/0[\/|]0/, substr($4, 1, 1) "/" substr($4, 1, 1), $i);
+    gsub(/1[\/|]1/, substr($5, 1, 1) "/" substr($5, 1, 1), $i);
+    gsub(/0[\/|]1/, substr($4, 1, 1) "/" substr($5, 1, 1), $i);
+  }
+  for (i=10; i<=50; i++) {
+    sub(/:.*/, "", $i);
+  }
+  print $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44, $45, $46, $47, $50}' > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/L.olivacea_to_count.txt
