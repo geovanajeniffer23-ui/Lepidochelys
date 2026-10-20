@@ -1,1 +1,36 @@
+# Run variant calling by interval to reduce RAM usage
+# Path to the intervals file.
+intervals_file="/media/labgenoma5/DATAPART4/ortela/scripts/intervals.list"
 
+# Reference
+export reference="/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic.fasta"
+
+# Output path
+export outdir="/media/labgenoma5/Expansion/L.olivacea/GVCF"
+
+# Number of threads per GATK call
+export threads=2
+
+# Loop over BAM files whose names start with "GF" and end with ".bam"
+for bam in /media/labgenoma5/Expansion/L.olivacea/paleomix/GF*.bam; do
+  export bam
+  export sample_name=$(basename "$bam" .bam)
+
+  echo "Processando amostra: $sample_name"
+
+cat "$intervals_file" | parallel --env reference --env bam --env threads --env outdir --env sample_name -j 2 '
+    interval={}
+    clean_interval=$(echo "$interval" | sed "s/:/_/g" | sed "s/-/_/g")
+    output="$outdir/${sample_name}_${clean_interval}.g.vcf.gz"
+    log_err="$outdir/${sample_name}_${clean_interval}.err"
+    echo "Rodando $interval para $sample_name"
+    gatk HaplotypeCaller --java-options "-Xmx5G" \
+      -R "$reference" \
+      -I "$bam" \
+      -O "$output" \
+      -ERC GVCF \
+      -L "$interval" \
+      --native-pair-hmm-threads $threads \
+      2> "$log_err" || echo "$sample_name: $interval" >> "$outdir/falhas.log"
+  '
+done
