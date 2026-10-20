@@ -382,3 +382,120 @@ zgrep -v "#" L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_TOLERATED.vcf |
   }
   print $16, $24, $25, $26, $27, $28, $29, $30, $32, $33, $34, $35, $36, $37, $38, $39, $41, $42, $43, $44, $45, $46, $47;
 }' > Atlantico_mod_deleter_TOLERATED.txt
+
+# Download the .txt files containing the genotypes, then calculate the counts and proportions to estimate the genetic load
+# Open each file with a text editor, substitute each '/' with '|'
+# Open R and count HIGH, MODERATE, and LOW impact genotypes for each population, then export the results to an Excel spreadsheet
+
+# HIGH impact variants
+# Atlantic
+Atlantico_high <- read.table("Atlantico_High_deleter.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Atlantico_high_het <- sapply(Atlantico_high, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Atlantico_high_homo <- sapply(Atlantico_high, function(column) sum(grepl("1\\|1", column)))
+
+print(Atlantico_high_het)
+print(Atlantico_high_homo)
+
+# Indian
+Indico_high <- read.table("Indico_high_deleter.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Indico_high_het <- sapply(Indico_high, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Indico_high_homo <- sapply(Indico_high, function(column) sum(grepl("1\\|1", column)))
+
+print(Indico_high_het)
+print(Indico_high_homo)
+
+# Pacific
+Pacifico_high <- read.table("Pacifico_high_deleter.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Pacifico_high_het <- sapply(Pacifico_high, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Pacifico_high_homo <- sapply(Pacifico_high, function(column) sum(grepl("1\\|1", column)))
+
+print(Pacifico_high_het)
+print(Pacifico_high_homo)
+
+# MODERATE DELETERIOUS impact variants
+# Atlantic
+Atlantico_mod_del <- read.table("Atlantico_mod_deleter_DELETERIOUS.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Atlantico_mod_del_het <- sapply(Atlantico_mod_del, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Atlantico_mod_del_homo <- sapply(Atlantico_mod_del, function(column) sum(grepl("1\\|1", column)))
+
+print(Atlantico_mod_del_het)
+print(Atlantico_mod_del_homo)
+
+# Indian
+Indico_mod_del <- read.table("Indico_mod_deleter_DELETERIOUS.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Indico_mod_del_het <- sapply(Indico_mod_del, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Indico_mod_del_homo <- sapply(Indico_mod_del, function(column) sum(grepl("1\\|1", column)))
+
+print(Indico_mod_del_het)
+print(Indico_mod_del_homo)
+
+# Pacific
+Pacifico_mod_del <- read.table("Pacifico_mod_deleter_DELETERIOUS.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Pacifico_mod_del_het <- sapply(Pacifico_mod_del, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Pacifico_mod_del_homo <- sapply(Pacifico_mod_del, function(column) sum(grepl("1\\|1", column)))
+
+print(Pacifico_mod_del_het)
+print(Pacifico_mod_del_homo)
+
+# MODERATE TOLERATED impact variants
+# Atlantic
+Atlantico_mod_tol <- read.table("Atlantico_mod_deleter_TOLERATED.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Atlantico_mod_tol_het <- sapply(Atlantico_mod_tol, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Atlantico_mod_tol_homo <- sapply(Atlantico_mod_tol, function(column) sum(grepl("1\\|1", column)))
+
+print(Atlantico_mod_tol_het)
+print(Atlantico_mod_tol_homo)
+
+# Indian
+Indico_mod_tol <- read.table("Indico_mod_deleter_TOLERATED.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Indico_mod_tol_het <- sapply(Indico_mod_tol, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Indico_mod_tol_homo <- sapply(Indico_mod_tol, function(column) sum(grepl("1\\|1", column)))
+
+print(Indico_mod_tol_het)
+print(Indico_mod_tol_homo)
+
+# Pacific
+Pacifico_mod_tol <- read.table("Pacifico_mod_deleter_TOLERATED.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Pacifico_mod_tol_het <- sapply(Pacifico_mod_tol, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Pacifico_mod_tol_homo <- sapply(Pacifico_mod_tol, function(column) sum(grepl("1\\|1", column)))
+
+print(Pacifico_mod_tol_het)
+print(Pacifico_mod_tol_homo)
+
+# LOW impact variants
+# Atlantic
+Atlantico_low <- read.table("Atlantico_Low_deleter.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Atlantico_low_het <- sapply(Atlantico_low, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Atlantico_low_homo <- sapply(Atlantico_low, function(column) sum(grepl("1\\|1", column)))
+
+print(Atlantico_low_het)
+print(Atlantico_low_homo)
+
+# Indian
+Indico_low <- read.table("Indico_low_deleter.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Indico_low_het <- sapply(Indico_low, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Indico_low_homo <- sapply(Indico_low, function(column) sum(grepl("1\\|1", column)))
+
+print(Indico_low_het)
+print(Indico_low_homo)
+
+# Pacific
+Pacifico_low <- read.table("Pacifico_low_deleter.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+Pacifico_low_het <- sapply(Pacifico_low, function(column) sum(grepl("0\\|1|1\\|0", column)))
+Pacifico_low_homo <- sapply(Pacifico_low, function(column) sum(grepl("1\\|1", column)))
+
+print(Pacifico_low_het)
+print(Pacifico_low_homo)
+
