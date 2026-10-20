@@ -1,6 +1,6 @@
 # Script modified from Battilani et al. 2025 (https://datadryad.org/landing/show?id=doi%3A10.5061%2Fdryad.ngf1vhj2f)
 
-#####################
+################################################################ est-sfs ################################################################
 # Generating input files for the est-sfs software
 
 # Process the VCF file by converting genotypes of the target population (L. olivacea) in columns 10–47 and 50 into their corresponding alleles from columns 4 and 5,
@@ -95,4 +95,5 @@ LC_NUMERIC=C awk '
         print "T"
 }' MODIFICADO_output-file-pvalues.txt > ancestral_states.txt
 
-#### Criar um FASTA e um VCF ancestralizado 
+################################################################ Ancestralizing FASTA and VCF files ################################################################
+Ancestralizing FASTA
