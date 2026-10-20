@@ -113,12 +113,10 @@ paste positions.txt ancestral_states.txt > ancestral_positions.txt
 ## Start Python script
 import gzip
 
-fasta_in = "/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/SFS_intergenicas_genicas/Ancestralização/FASTA_com_N.fasta"
-ancestral_file = "/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/SFS_intergenicas_genicas/Ancestralização/ancestral_positions.t
-xt.gz"
-fasta_out = "/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/SFS_intergenicas_genicas/Ancestralização/fasta_ancestralizado.fasta
-"
-log_out = "/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/SFS_intergenicas_genicas/Ancestralização/mismatches_REF_vs_ANC.log"
+fasta_in = "/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic.fasta"
+ancestral_file = "/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/ancestral_positions.txt"
+fasta_out = "/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/Fasta_ancestralizado/fasta_ancestralizado.fasta"
+log_out = "/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/Fasta_ancestralizado/mismatches_REF_vs_ANC.log"
 
 LINE_LEN = 60
 
@@ -179,3 +177,72 @@ print(f"Log salvo em: {log_out}")
 # Before adding the information about the ancestral alleles to the VCF file, create a header for that information
 echo '##INFO=<ID=AA,Number=1,Type=String,Description="Ancestral allele">' > AA.hdr
 
+# Add the INFO field AA (ancestral allele) to the VCF file
+bcftools annotate \
+-a /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/ancestral_positions.txt \
+-c CHROM,POS,INFO/AA \
+-h /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/AA.hdr \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/L.olivacea_13.vcf \
+-Oz -o /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/L.olivacea_13_AA.vcf.gz 
+
+# Generate a VCF file in which the ancestral allele is used as the reference allele
+  bcftools norm \
+    -f /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/Fasta_ancestralizado/fasta_ancestralizado.fasta \
+    --check-ref s \
+    -Oz \
+    -o /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/L.olivacea_13_REF_ANCESTRAL.vcf.gz \
+    /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/L.olivacea_13_AA.vcf.gz
+
+# Remove variants that are fixed in L. olivacea, as the goal is to assess genetic variation within L. olivacea populations
+
+bcftools view --samples ^Sample65,Sample66 -Oz -o L.olivacea_13_REF_ANCESTRAL_SEM_OUTGROUP.vcf.gz L.olivacea_13_REF_ANCESTRAL.vcf.gz
+
+bcftools view -i 'AC>0 && AC<AN' \
+  -Oz \
+  -o L.olivacea_13_REF_ANCESTRAL_SEM_OUTGROUP_AC_AN.vcf.gz \
+  L.olivacea_13_REF_ANCESTRAL_SEM_OUTGROUP.vcf.gz
+
+rm L.olivacea_13_REF_ANCESTRAL_SEM_OUTGROUP.vcf.gz
+
+mv L.olivacea_13_REF_ANCESTRAL_SEM_OUTGROUP_AC_AN.vcf.gz L.olivacea_13_REF_ANCESTRAL_SEM_OUTGROUP.vcf.gz
+
+################################################################ Genetic load annotation ################################################################
+
+########## snpEff ##########
+
+# BUILD A snpEff DATABASE
+#Create a directory inside the snpEff 'data' folder, using the name of the annotated database
+mkdir /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea
+
+# Copy inside that directory the reference genome and modify its name, since snpEff requires fasta ending in .fa and with same name of the database
+cp /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/Fasta_ancestralizado/fasta_ancestralizado.fasta /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea
+mv fasta_ancestralizado.fasta sequences.fa
+
+# Upload in this directory the .gtf file 
+cp /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/genes.gtf.gz /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea
+
+# Edit .config file adding your reference genome
+echo "L.olivacea.genome : L.olivacea" >> snpEff.config
+
+# Build the database
+java -jar snpEff.jar build -gtf22 -noCheckCds -noCheckProtein -v L.olivacea > snpEff.log 2>&1
+
+# Annotate the VCF file
+  java -jar /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/snpEff.jar ann L.olivacea \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/L.olivacea_13_REF_ANCESTRAL_SEM_OUTGROUP.vcf.gz > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF.vcf.gz 
+
+# Let's filter keeping HIGH impact variants, then MODERATE impact variants, then LOW impact variants in different files
+awk -F'\t' 'BEGIN {OFS="\t"} /^#/ {print; next} $8 ~ /HIGH/' \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF.vcf > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/High_deleter/L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_HIGH_DELETER.vcf.gz
+
+awk -F'\t' 'BEGIN {OFS="\t"} /^#/ {print; next} $8 ~ /MODERATE/' \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF.vcf > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/Moderate_deleter/L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETER.vcf.gz 
+
+awk -F'\t' 'BEGIN {OFS="\t"} /^#/ {print; next} $8 ~ /LOW/' \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF.vcf > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/Low_deleter/L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_LOW_DELETER.vcf.gz 
+
+# For each population, generate the genotype of each variant for every individual, so that the variants can be counted in subsequent analyses
