@@ -120,7 +120,6 @@ log_out = "/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genétic
 
 LINE_LEN = 60
 
-# 1) Carrega alelos ancestrais
 ancestral = {}
 
 with gzip.open(ancestral_file, "rt") as f:
@@ -130,7 +129,6 @@ with gzip.open(ancestral_file, "rt") as f:
 
 print("Alelos ancestrais carregados.")
 
-# 2) Processa FASTA
 with open(fasta_in) as fin, open(fasta_out, "w") as fout, open(log_out, "w") as flog:
     chrom = None
     seq = []
@@ -146,7 +144,6 @@ with open(fasta_in) as fin, open(fasta_out, "w") as fout, open(log_out, "w") as 
                         flog.write(f"{chrom}\t{pos}\t{ref}\t{anc}\n")
                     s[pos - 1] = anc
 
-        # escrita eficiente em blocos
         for i in range(0, len(s), LINE_LEN):
             fout.write("".join(s[i:i+LINE_LEN]) + "\n")
 
@@ -163,7 +160,6 @@ with open(fasta_in) as fin, open(fasta_out, "w") as fout, open(log_out, "w") as 
         else:
             seq.append(line)
 
-    # último cromossomo
     if chrom is not None:
         write_seq(chrom, seq)
 
