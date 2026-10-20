@@ -1,5 +1,16 @@
+
+
 # Total heterozygosity
-vcftools --gzvcf L.olivacea_9.vcf.gz \
+vcftools --gzvcf L.olivacea_12.vcf.gz \
 --minDP 4 \
 --het \
---out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivacea_9_het_por_amostra
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivacea_12_het_por_amostra
+
+# Intergenic heterozygosity
+vcftools --gzvcf L.olivacea_12.vcf.gz \
+--minDP 4 \
+--bed /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis_intergênicas.bed \
+--het \
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivaceaa_12_intergenico_het_por_amostra
+
+# Intergenic heterozygosity
