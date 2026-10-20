@@ -82,4 +82,42 @@ plink --bim L.olivacea_12.bim \
 --homozyg-window-threshold 0.01 \
 --out L.olivacea_12_ROHs
 
-#
+########## Classifying ROH by size ##########
+## Start Python script
+
+import pandas as pd
+
+df = pd.read_csv("/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/ROHs/L.olivacea_12_ROHs.hom", delim_whitespace=True)
+
+bins = [500, 1000, 2000, 5000, float('inf')]
+labels = ['500-1000', '1001-2000', '2001-5000', '>5001']
+
+df['Faixa_KB'] = pd.cut(df['KB'], bins=bins, labels=labels, right=True, include_lowest=True)
+
+resultado = (
+    df.groupby(['IID', 'Faixa_KB'])
+    .agg(
+        Soma_KB=('KB', 'sum'),
+        Num_ROHs=('KB', 'count')
+    )
+    .reset_index()
+)
+
+resultado_pivot = resultado.pivot_table(
+    index=['IID'],
+    columns='Faixa_KB',
+    values=['Soma_KB', 'Num_ROHs'],
+    fill_value=0
+)
+
+resultado_pivot.columns = [f"{metric}_{faixa}" for metric, faixa in resultado_pivot.columns]
+resultado_pivot = resultado_pivot.reset_index()
+
+resultado_pivot.to_csv("/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/ROHs/L.olivacea_12_ROHs_resumo_rohs_por_faixa.csv", index=False)
+
+## Final Python script
+
+# Download the resumo_rohs_por_faixa.csv files and upload each one to an Excel spreadsheet.
+# For each ROH size category and each ocean separately, calculate the mean number of base pairs (bp) contained in ROHs. 
+# Since the results are reported in kilobases (kb), multiply the values by 1,000 to convert them to base pairs.
+# Then, divide the mean number of base pairs in ROHs by the genome size and multiply by 100 to calculate the mean percentage of the genome covered by ROHs for each size category and each ocean.
