@@ -61,9 +61,25 @@ wilcox.test(Pacifico_Genico, Indico_Het_Genico)
 
 ################################################################ ROHS ################################################################
 
+# Generate the PLINK input file
 plink --allow-extra-chr \
---vcf L.olivacea_9.vcf.gz \
+--vcf L.olivacea_12.vcf.gz \
 --make-bed \
---out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/ROHs/L.olivacea_9 \
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/ROHs/L.olivacea_12 \
 --threads 10 \
 --memory 4000
+
+# Run the ROHs
+plink --bim L.olivacea_12.bim \
+--bed L.olivacea_12.bed \
+-fam L.olivacea_12.fam \
+--allow-extra-chr --no-sex --no-parents --no-pheno \
+--homozyg-snp 20 \
+--homozyg-kb 50 \
+--homozyg-window-snp 20 \
+--homozyg-window-het 1 \
+--homozyg-window-missing 5 \
+--homozyg-window-threshold 0.01 \
+--out L.olivacea_12_ROHs
+
+#
