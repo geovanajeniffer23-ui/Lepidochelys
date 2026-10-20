@@ -1,4 +1,4 @@
-
+################################################################ Heterozygosity ################################################################
 
 # Total heterozygosity
 vcftools --gzvcf L.olivacea_12.vcf.gz \
@@ -14,3 +14,12 @@ vcftools --gzvcf L.olivacea_12.vcf.gz \
 --out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivaceaa_12_intergenico_het_por_amostra
 
 # Intergenic heterozygosity
+vcftools --gzvcf L.olivacea_12.vcf.gz \
+--minDP 4 \
+--bed /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis_gênicas.bed \
+--het \
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivaceaa_12_genico_het_por_amostra
+
+# Download the .het files and upload each one to an Excel spreadsheet.
+# Calculate the difference between the number of sites recovered by the analysis (N_SITES) and the number of observed homozygous sites (O(HOM)).
+# Divide the result by the number of sites considered reliable in previous analyses, then multiply by 100 to obtain the percentage.
