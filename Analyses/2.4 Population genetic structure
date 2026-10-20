@@ -1,7 +1,8 @@
 ################################################################ PCA ################################################################
 
 # Generate the PLINK input file
-plink --vcf L.olivacea_11_Atlantico.vcf.gz  --double-id --allow-extra-chr --make-bed --out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/PCA/Atlantico/L.olivacea_11_Atlantico --threads 10 --memory 8000
+plink --vcf L.olivacea_11_Atlantico.vcf.gz  --double-id --allow-extra-chr --make-bed \
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/PCA/Atlantico/L.olivacea_11_Atlantico --threads 10 --memory 8000
 
 # Run the PCA
 plink --bfile L.olivacea_11_Atlantico --pca 10 --out L.olivacea_11_Atlantico --allow-extra-chr  --threads 10 --memory 8000
@@ -16,3 +17,55 @@ bcftools annotate \
     -o L.olivacea_11_NEW.vcf.gz \
     L.olivacea_11.vcf.gz
 
+# Generate the PLINK input file
+plink --vcf L.olivacea_11_NEW.vcf.gz --double-id --chr-set 28 --make-bed \
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Admixture/L.olivacea_11_NEW --threads 2 --memory 8000
+
+########## Modify the .fam file to include population information ##########
+## Start Python script
+import pandas as pd
+
+fam = pd.read_csv("/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Admixture/L.olivacea_11_NEW.fam", sep='\s+', header=None)
+fam.columns = ["FID", "IID", "PID", "MID", "SEX", "PHENO"]
+
+meta = pd.read_csv("/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/L.olivacea_oceanos.tsv",
+                   sep="\t", header=None, names=["sample_id", "population"])
+
+fam = fam.merge(meta, left_on="FID", right_on="sample_id", how="left")
+
+fam["PHENO"] = fam["population"]
+
+fam[["FID", "IID", "PID", "MID", "SEX", "PHENO"]].to_csv("/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Admixture/L.olivacea_11_NEW_arrumado.fam", sep=" ", header=False, index=False)
+
+## Final Python script
+
+########## Generate the .pop file using the population information from the .fam file ##########
+## Start Python script
+
+import pandas as pd
+
+fam = pd.read_csv("/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Admixture/L.olivacea_18.fam", sep="\s+", header=None)
+fam.columns = ["FID", "IID", "PID", "MID", "SEX", "POP"]
+
+pop_labels = []
+
+for pop in fam["POP"]:
+    if pop == "Atlantic":
+        pop_labels.append("Atlantic")
+    elif pop == "Indic":
+        pop_labels.append("Indic")
+    elif pop == "Pacific":
+        pop_labels.append("Pacific")
+    else:
+        pop_labels.append("-")  # inferir ancestralidade (por exemplo: vidua_nigrigula)
+
+with open("/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Admixture/L.olivacea_11_NEW.fam.pop", "w") as f:
+    for label in pop_labels:
+        f.write(label + "\n")
+
+## Final Python script
+
+# Run the ADMIXTURE
+for K in 1 2 3 4 5 6 7 8 9; do
+    admixture --cv=10 L.olivacea_11_NEW.bed $K | tee logK${K}.L.olivacea_11_NEW.bed.cv.out
+done
