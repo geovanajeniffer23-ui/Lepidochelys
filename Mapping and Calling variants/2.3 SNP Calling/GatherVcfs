@@ -30,5 +30,5 @@ gatk GatherVcfs --java-options "-Xmx8G"\
   -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223137.1_1_19549198.vcf.gz \
   -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223138.1_1_19522081.vcf.gz \
   -I /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea_OZ223139.1_1_7529980.vcf.gz \
-  -O /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivacea.vcf
+  -O /media/labgenoma5/Expansion/L.olivacea/VCF/L.olivacea.vcf
 
