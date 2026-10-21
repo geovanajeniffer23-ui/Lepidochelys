@@ -275,3 +275,13 @@ angsd \
 realSFS Pacifico_unfolded.saf.idx -P 4 > Pacifico_Unfolded.sfs 
 realSFS Indico_unfolded.saf.idx -P 4 > Indico_unfolded.sfs 
 realSFS Atlantico_unfolded.saf.idx -P 4 > Atlantico_Unfolded.sfs
+
+###################################################### Stairway Plot v3 ######################################################
+
+# Atlantic
+python3 stairway_plot_v3.8.3.py prepare-cluster Atlantico/Atlantico.blueprint
+Atlantico\java_commands\java_commands.bat
+bash -c 'while IFS= read -r cmd; do bash -lc "$cmd"; done' < Atlantico/java_commands/java_finalize.txt
+python3 stairway_plot_v3.8.3.py collect Atlantico/Atlantico.blueprint
+
+# Other oceans ...
