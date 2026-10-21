@@ -12,7 +12,7 @@ plink --bfile L.olivacea_11_Atlantico --pca 10 --out L.olivacea_11_Atlantico --a
 # ADMIXTURE does not support chromosome names containing letters, as in this case. Therefore, rename them so that they contain only numbers
 
 bcftools annotate \
-    --rename-chrs teste_Gone.txt \
+    --rename-chrs cromossomos.txt \
     -Oz \
     -o L.olivacea_11_NEW.vcf.gz \
     L.olivacea_11.vcf.gz
