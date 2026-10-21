@@ -3,5 +3,8 @@
 bcftools annotate \
     --rename-chrs cromossomos.txt \
     -Oz \
-    -o L.olivacea_11_NEW.vcf.gz \
+    -o L.olivacea_13_cromossomos.vcf.gz \
     /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/L.olivacea_13_REF_ANCESTRAL_SEM_OUTGROUP.vcf.gz
+
+# Index the VCF file
+bcftools index L.olivacea_13_cromossomos.vcf.gz
