@@ -8,3 +8,7 @@ bcftools annotate \
 
 # Index the VCF file
 bcftools index L.olivacea_13_cromossomos.vcf.gz
+
+# Run PHLASH
+
+#
