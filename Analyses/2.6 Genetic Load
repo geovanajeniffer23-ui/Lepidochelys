@@ -190,7 +190,6 @@ bcftools annotate \
     /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/L.olivacea_13_AA.vcf.gz
 
 # Remove variants that are fixed in L. olivacea, as the goal is to assess genetic variation within L. olivacea populations
-
 bcftools view --samples ^Sample65,Sample66 -Oz -o L.olivacea_13_REF_ANCESTRAL_SEM_OUTGROUP.vcf.gz L.olivacea_13_REF_ANCESTRAL.vcf.gz
 
 bcftools view -i 'AC>0 && AC<AN' \
