@@ -4,4 +4,4 @@ bcftools annotate \
     --rename-chrs cromossomos.txt \
     -Oz \
     -o L.olivacea_11_NEW.vcf.gz \
-    L.olivacea_11.vcf.gz
+    /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/est-sfs/L.olivacea_14_REF_ANCESTRAL.vcf.gz
