@@ -1,5 +1,32 @@
+###################################################### Regions with adequate coverage for SFS estimation ######################################################
+
+# Only genomic positions with adequate coverage across all individuals were considered for SFS estimation. Ancestral allele information was used to construct the 
+# unfolded site frequency spectrum (uSFS)
+
+# Generate a file containing the read depth at each genomic position for every sample to be included in the analysis (ingroup and outgroup)
+bedtools genomecov -ibam /media/labgenoma5/Expansion/L.olivacea/paleomix/GFturtle_31.L.olivacearef.bam \
+-bg > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/SFS/Filtro_de_cobertura/Cobertura_por_posição/GFturtle_31.L.olivacearef_coverage.bedgraph
+
+# Other samples ...
+
+# Remove genomic regions with read coverage substantially below or above the mean coverage of each sample
+# Minimum coverage: fixed threshold of 4× for all samples
+# Maximum coverage: 2× the mean coverage of each sample
+min=4; max=32; awk -v min="$min" -v max="$max" '$4 >= min && $4 <= max' \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/SFS/Filtro_de_cobertura/Cobertura_por_posição/GFturtle_31.L.olivacearef_coverage.bedgraph > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/SFS/Filtro_de_cobertura/Cobertura_por_posição_filtrado/GFturtle_31_coverage_${min}_${max}.bedgraph
+
+# Other samples ...
+
+# Merges overlapping or adjacent regions in the bedGraph file
+bedtools merge -i GFturtle_31_coverage_4_32.bedgraph > GFturtle_31_coverage_4_32.bed
+
+# Other samples ...
+
+# Generate a BED file containing only genomic regions with adequate coverage shared by all samples
+bedtools multiinter -i *bed > all.shared.bed
+awk '$4==52 {print $1, $2, $3}' all.shared.bed > all.shared_multiinter.bed
+sed -i 's/ \+/\t/g' all.shared_multiinter.bed 
 
 
-# Only genomic positions with adequate coverage across all individuals were considered to SFS
 
-#
