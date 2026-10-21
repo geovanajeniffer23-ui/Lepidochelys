@@ -1,1 +1,14 @@
-# 
+# GONE2 does not support chromosome names containing letters. Therefore, we used the same VCF file with renamed chromosome identifiers for PHLASH
+
+# Generate population-specific VCF files containing only the samples belonging to each population
+
+# Indian
+bcftools view \
+--samples ^Sample2,Sample30,Sample31,Sample32,Sample35,Sample36,Sample38,Sample39,Sample40,Sample43,Sample44,Sample45,Sample46,Sample47,Sample48,Sample49,Sample50,Sample51,Sample52,Sample53,Sample55,Sample56,Sample59,Sample4,Sample5,Sample11,Sample12,Sample20,Sample19,Sample7,Sample65,Sample66 \
+-Oz -o /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/GONE/GONE2/Testes/Teste_11/L.olivacea_14_Indico.vcf.gz \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PHLASH/L.olivacea_13_cromossomos.vcf.gz
+
+bcftools view -i 'AC>0 && AC<AN' \
+  -Oz \
+  -o   L.olivacea_14_Indico_acan.vcf.gz \
+  L.olivacea_14_Indico.vcf.gz 
