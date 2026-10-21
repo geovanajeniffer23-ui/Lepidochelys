@@ -531,3 +531,137 @@ wilcox.test(Pacifico_High_Total, Indico_High_Total, exact = FALSE)
 # Other genetic load categories ...
 
 ################################################################ Functional Enrichment ################################################################
+
+# For all variants classified as having High and Moderate deleterious variants, GO and KEGG functional enrichment analyses were performed on the genes 
+# affected by these mutations using the DAVID database
+
+# HIGH impact variants
+
+# Create a table containing only the transcript IDs annotated as HIGH, which will be used to identify genes carrying HIGH-impact variants
+bcftools query -f '%INFO/ANN\n' L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_HIGH_DELETER.vcf.gz |
+awk -F',' '
+{
+    for (i = 1; i <= NF; i++) {
+
+        split($i, f, "|")
+
+        # f[3] = Impact
+        # f[7] = Transcript_ID
+
+        if (f[3] == "HIGH") {
+            print f[7]
+        }
+    }
+}
+' > high_transcript_ids.txt
+
+# Identify the corresponding standard_name (gene) for each transcript_id
+awk '
+BEGIN {
+    FS = OFS = "\t"
+}
+
+FNR == NR {
+    high[FNR] = $1
+    n_high = FNR
+    next
+}
+
+$3 == "transcript" {
+
+    tid = "."
+    std = "."
+
+    n = split($9, f, ";")
+
+    for (i = 1; i <= n; i++) {
+
+        gsub(/^ +| +$/, "", f[i])
+
+        if (f[i] ~ /^transcript_id /) {
+            gsub(/^transcript_id "/, "", f[i])
+            gsub(/"$/, "", f[i])
+            tid = f[i]
+        }
+
+        if (f[i] ~ /^standard_name /) {
+            gsub(/^standard_name "/, "", f[i])
+            gsub(/"$/, "", f[i])
+            std = f[i]
+        }
+    }
+
+    for (i = 1; i <= n_high; i++) {
+        if (tid == high[i])
+            print tid, std
+    }
+}
+' \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/High_deleter/high_transcript_ids.txt \
+<(zcat /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/genes.gtf.gz) \
+> /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/High_deleter/transcript2standard_HIGH.txt
+
+# MODERATE DELETERIOUS impact
+
+# Create a table containing only the transcript IDs annotated as DELETERIOUS, which will be used to identify genes carrying HIGH-impact variants
+bcftools query -f '%INFO/SIFTINFO\n' \
+L.olivacea_13_REF_ANCESTRAL_ANOTADO_SNPEFF_MODERATE_DELETERIOUS_sem_Low_Confidence.vcf.gz |
+awk -F',' '
+{
+    for (i = 1; i <= NF; i++) {
+        split($i, f, "|")
+
+        if (f[13] == "DELETERIOUS") {
+            print f[2]
+        }
+    }
+}
+' > Deleterious_transcript_ids.txt
+
+# Identify the corresponding standard_name (gene) for each transcript_id
+awk '
+BEGIN {
+    FS = OFS = "\t"
+}
+
+FNR == NR {
+    high[FNR] = $1
+    n_high = FNR
+    next
+}
+
+$3 == "transcript" {
+
+    tid = "."
+    std = "."
+
+    n = split($9, f, ";")
+
+    for (i = 1; i <= n; i++) {
+
+        gsub(/^ +| +$/, "", f[i])
+
+        if (f[i] ~ /^transcript_id /) {
+            gsub(/^transcript_id "/, "", f[i])
+            gsub(/"$/, "", f[i])
+            tid = f[i]
+        }
+
+        if (f[i] ~ /^standard_name /) {
+            gsub(/^standard_name "/, "", f[i])
+            gsub(/"$/, "", f[i])
+            std = f[i]
+        }
+    }
+
+    for (i = 1; i <= n_high; i++) {
+        if (tid == high[i])
+            print tid, std
+    }
+}
+' \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/Moderate_deleter/Results_SIFT4G/Deleterious_transcript_ids.txt \
+<(zcat /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/genes.gtf.gz) \
+> /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Carga_Genética/snpEff/data/L.olivacea/VCFs_anotados/Moderate_deleter/Results_SIFT4G/transcript2standard_Deleterious.txt
+
+# Download both transcript2standard files and perform the analyses using the DAVID database
