@@ -2,13 +2,74 @@
 
 # Generate population-specific VCF files containing only the samples belonging to each population
 
-# Indian
+# Brazil
 bcftools view \
---samples ^Sample2,Sample30,Sample31,Sample32,Sample35,Sample36,Sample38,Sample39,Sample40,Sample43,Sample44,Sample45,Sample46,Sample47,Sample48,Sample49,Sample50,Sample51,Sample52,Sample53,Sample55,Sample56,Sample59,Sample4,Sample5,Sample11,Sample12,Sample20,Sample19,Sample7,Sample65,Sample66 \
--Oz -o /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/GONE/GONE2/Testes/Teste_11/L.olivacea_14_Indico.vcf.gz \
+--samples ^Sample4,Sample5,Sample11,Sample12,Sample20,Sample19,Sample7,Sample1,Sample3,Sample15,Sample16,Sample26,Sample29,Sample24,Sample25,Sample28,Sample65,Sample66 \
+-Oz -o /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/GONE2/L.olivacea_13_cromossomos_Brasil.vcf.gz \
 /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PHLASH/L.olivacea_13_cromossomos.vcf.gz
 
 bcftools view -i 'AC>0 && AC<AN' \
   -Oz \
-  -o   L.olivacea_14_Indico_acan.vcf.gz \
-  L.olivacea_14_Indico.vcf.gz 
+  -o  L.olivacea_13_cromossomos_Brasil_acan.vcf.gz \
+  L.olivacea_13_cromossomos_Brasil.vcf.gz 
+
+rm  L.olivacea_13_cromossomos_Brasil.vcf.gz 
+
+mv  L.olivacea_13_cromossomos_Brasil_acan.vcf.gz L.olivacea_13_cromossomos_Brasil.vcf.gz 
+
+# Indian
+bcftools view \
+--samples ^Sample2,Sample30,Sample31,Sample32,Sample35,Sample36,Sample38,Sample39,Sample40,Sample43,Sample44,Sample45,Sample46,Sample47,Sample48,Sample49,Sample50,Sample51,Sample52,Sample53,Sample55,Sample56,Sample59,Sample4,Sample5,Sample11,Sample12,Sample20,Sample19,Sample7,Sample65,Sample66 \
+-Oz -o /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/GONE2/L.olivacea_13_cromossomos_Indico.vcf.gz \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PHLASH/L.olivacea_13_cromossomos.vcf.gz
+
+bcftools view -i 'AC>0 && AC<AN' \
+  -Oz \
+  -o  L.olivacea_13_cromossomos_Indico_acan.vcf.gz \
+  L.olivacea_13_cromossomos_Indico.vcf.gz 
+
+rm  L.olivacea_13_cromossomos_Indico.vcf.gz
+
+mv  L.olivacea_13_cromossomos_Indico_acan.vcf.gz L.olivacea_13_cromossomos_Indico.vcf.gz
+
+# Pacific
+bcftools view \
+--samples ^Sample2,Sample30,Sample31,Sample32,Sample35,Sample36,Sample38,Sample39,Sample40,Sample43,Sample44,Sample45,Sample46,Sample47,Sample48,Sample49,Sample50,Sample51,Sample52,Sample53,Sample55,Sample56,Sample59,Sample1,Sample3,Sample15,Sample16,Sample26,Sample29,Sample24,Sample25,Sample28,Sample65,Sample66 \
+-Oz -o /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/GONE2/L.olivacea_13_cromossomos_Pacifico.vcf.gz \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PHLASH/L.olivacea_13_cromossomos.vcf.gz
+
+bcftools view -i 'AC>0 && AC<AN' \
+  -Oz \
+  -o  L.olivacea_13_cromossomos_Pacifico_acan.vcf.gz \
+  L.olivacea_13_cromossomos_Pacifico.vcf.gz 
+
+rm  L.olivacea_13_cromossomos_Pacifico.vcf.gz
+
+mv  L.olivacea_13_cromossomos_Pacifico_acan.vcf.gz L.olivacea_13_cromossomos_Pacifico.vcf.gz
+
+#	GONE2 requires chromosomes to meet a minimum length threshold. Therefore, chromosomes OZ223129.1–OZ223139.1 (or chromosomes 18–28 in the renamed dataset) 
+# had to be excluded from the analysis
+# Brazil
+bcftools view -Oz -o L.olivacea_13_cromossomos_Brasil_1-17.vcf -e 'CHROM=="18,19,20,21,22,23,24,25,26,27,28"' L.olivacea_13_cromossomos_Brasil.vcf.gz 
+
+# Indian
+bcftools view -Oz -o L.olivacea_13_cromossomos_Indico_1-17.vcf -e 'CHROM=="18,19,20,21,22,23,24,25,26,27,28"' L.olivacea_13_cromossomos_Indico.vcf.gz 
+
+# Pacific
+bcftools view -Oz -o L.olivacea_13_cromossomos_Pacifico_1-17.vcf -e 'CHROM=="18,19,20,21,22,23,24,25,26,27,28"' L.olivacea_13_cromossomos_Pacifico.vcf.gz
+
+# Run GONE2
+# Brazil
+./gone2_tui -E -r 1.0 -t 10 \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/GONE2/L.olivacea_13_cromossomos_Brasil.vcf.gz  \
+-o /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/GONE2/Brazil/L.olivacea_13_cromossomos_Brasil
+
+# Indian
+./gone2_tui -E -x -r 1.0 -t 10 \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/GONE2/L.olivacea_13_cromossomos_Indico.vcf.gz \
+-o /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/GONE2/Indico/L.olivacea_13_cromossomos_Indico
+
+# Pacific
+./gone2_tui -E -r 1.0 -t 10 \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/GONE2/L.olivacea_13_cromossomos_Pacifico.vcf.gz  \
+-o /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/GONE2/Pacifico/L.olivacea_13_cromossomos_Pacifico
