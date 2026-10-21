@@ -1,1 +1,23 @@
+# The samples with the highest coverage in each subpopulation (country) were used
 
+# Generate a consensus sequence for each sample of interest. The resulting FASTQ files were further filtered using Seqtk v1.3-r106 to retain only regions 
+# identified as reliable 
+
+# Atlantic
+# Brazil
+samtools mpileup -C50 \
+-uf /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic.fasta \
+/media/labgenoma5/Expansion/L.olivacea/paleomix/BRturtle_49.L.olivacearef.bam | bcftools call -c \
+| vcfutils.pl vcf2fq -d 10 -D 60 | gzip > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/BRturtle_49.fq.gz
+
+seqtk subseq BRturtle_49.fq.gz /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed \
+> BRturtle_49_confiavel.fq.gz
+
+# French Guiana
+samtools mpileup -C50 \
+-uf /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic.fasta \
+/media/labgenoma5/Expansion/L.olivacea/paleomix/GFturtle_32.L.olivacearef.bam | bcftools call -c \
+| vcfutils.pl vcf2fq -d 5 -D 32 | gzip > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/GFturtle_32.fq.gz  
+
+# Indian
+# Brazil
