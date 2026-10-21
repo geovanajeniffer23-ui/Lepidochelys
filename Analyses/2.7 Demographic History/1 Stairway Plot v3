@@ -36,6 +36,8 @@ bedtools intersect -a /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/His
 # Calculate the total number of base pairs (bp) retained in the final file for SFS estimation
 awk '{total += $3 - $2} END {print total}'  regioes_para_SFS.bed
 
+################################################################ Ancestral allele inference ################################################################
+
 
 
 
