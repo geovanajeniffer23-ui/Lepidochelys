@@ -41,3 +41,57 @@ samtools mpileup -C50 -uf /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea
 | vcfutils.pl vcf2fq -d 4 -D 24 | gzip > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/MLturtle_25.fq.gz   
       
 seqtk subseq MLturtle_25.fq.gz /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed > MLturtle_25_confiavel.fq.gz 
+
+# Pacific
+# Mexico
+samtools mpileup -C50 -uf /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic.fasta \
+/media/labgenoma5/Expansion/L.olivacea/paleomix/MXturtle_5.L.olivacearef.bam | bcftools call -c \
+| vcfutils.pl vcf2fq -d 10 -D 60 | gzip > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/MXturtle_5.fq.gz
+      
+seqtk subseq MXturtle_5.fq.gz /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed > MXturtle_5_confiavel.fq.gz    
+
+# Costa Rica
+samtools mpileup -C50 -uf /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic.fasta \
+/media/labgenoma5/Expansion/L.olivacea/paleomix/CRturtle_4.L.olivacearef.bam | bcftools call -c \
+| vcfutils.pl vcf2fq -d 9 -D 58 | gzip > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/CRturtle_4.fq.gz
+      
+seqtk subseq CRturtle_4.fq.gz /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed > CRturtle_4_confiavel.fq.gz
+
+# Generate the PSMC input file
+# Atlantic
+# Brazil
+utils/fq2psmcfa -q20 /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/BRturtle_49_confiavel.fq.gz > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/BRturtle_49_confiavel.psmcfa
+
+# French Guiana
+utils/fq2psmcfa -q20 /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/GFturtle_32_confiavel.fq.gz > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/GFturtle_32_confiavel.psmcfa
+
+# Indian
+# Sri Lanka
+utils/fq2psmcfa -q20 /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/SRIturtle_3_confiavel.fq.gz > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/SRIturtle_3_confiavel.psmcfa
+
+# Australia
+utils/fq2psmcfa -q20 /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/AUSturtle_1_confiavel.fq.gz > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/AUSturtle_1_confiavel.psmcfa
+
+# Malaysia
+utils/fq2psmcfa -q20 /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/MLturtle_25_confiavel.fq.gz > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/MLturtle_25_confiavel.psmcfa
+
+# Pacific
+# Mexico
+utils/fq2psmcfa -q20 /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/MXturtle_5_confiavel.fq.gz > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/MXturtle_5_confiavel.psmcfa
+
+# Costa Rica
+utils/fq2psmcfa -q20 /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/CRturtle_4_confiavel.fq.gz > \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/CRturtle_4_confiavel.psmcfa
+
+# Run PSMC
+./psmc -N25 -t15 -r5 -p "4+25*2+4+6" \
+-o /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/Atlantico_results/BR_49/BRturtle_49_confiavel.psmc \
+/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/BRturtle_49_confiavel.psmcfa
+
+# Other samples ...
