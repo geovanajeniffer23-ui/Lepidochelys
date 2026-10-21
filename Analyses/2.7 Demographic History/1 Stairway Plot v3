@@ -28,5 +28,9 @@ bedtools multiinter -i *bed > all.shared.bed
 awk '$4==52 {print $1, $2, $3}' all.shared.bed > all.shared_multiinter.bed
 sed -i 's/ \+/\t/g' all.shared_multiinter.bed 
 
+# Intersect the genomic regions with adequate coverage shared by all samples with the reliable regions identified in previous analyses 
+# (Mapping and Calling variants/2.3 Variant Filtering)
+bedtools intersect -a /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/SFS/Filtro_de_cobertura/Cobertura_por_posição_filtrado/all.shared_multiinter.bed \
+-b /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis_11.11_so_chrms.bed > regioes_para_SFS_genicao_e_intergenico.bed
 
 
