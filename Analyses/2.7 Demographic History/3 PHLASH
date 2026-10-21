@@ -1,1 +1,7 @@
+# PHLASH does not support chromosome names containing ".", as in this case. Therefore, rename them so that they contain only numbers
 
+bcftools annotate \
+    --rename-chrs cromossomos.txt \
+    -Oz \
+    -o L.olivacea_11_NEW.vcf.gz \
+    L.olivacea_11.vcf.gz
