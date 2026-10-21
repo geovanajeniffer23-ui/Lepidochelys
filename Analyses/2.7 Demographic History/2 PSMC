@@ -10,8 +10,7 @@ samtools mpileup -C50 \
 /media/labgenoma5/Expansion/L.olivacea/paleomix/BRturtle_49.L.olivacearef.bam | bcftools call -c \
 | vcfutils.pl vcf2fq -d 10 -D 60 | gzip > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/BRturtle_49.fq.gz
 
-seqtk subseq BRturtle_49.fq.gz /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed \
-> BRturtle_49_confiavel.fq.gz
+seqtk subseq BRturtle_49.fq.gz /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed > BRturtle_49_confiavel.fq.gz
 
 # French Guiana
 samtools mpileup -C50 \
@@ -19,5 +18,26 @@ samtools mpileup -C50 \
 /media/labgenoma5/Expansion/L.olivacea/paleomix/GFturtle_32.L.olivacearef.bam | bcftools call -c \
 | vcfutils.pl vcf2fq -d 5 -D 32 | gzip > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/GFturtle_32.fq.gz  
 
+seqtk subseq GFturtle_32.fq.gz /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed > GFturtle_32_confiavel.fq.gz
+
 # Indian
-# Brazil
+# Sri Lanka
+samtools mpileup -C50 -uf /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic.fasta \
+/media/labgenoma5/Expansion/L.olivacea/paleomix/SRIturtle_3.L.olivacearef.bam | bcftools call -c \
+| vcfutils.pl vcf2fq -d 10 -D 60 | gzip > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/SRIturtle_3.fq.gz
+      
+seqtk subseq SRIturtle_3.fq.gz /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed > SRIturtle_3_confiavel.fq.gz  
+
+# Australia
+samtools mpileup -C50 -uf /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic.fasta \
+/media/labgenoma5/Expansion/L.olivacea/paleomix/AUSturtle_1.L.olivacearef.bam | bcftools call -c \
+| vcfutils.pl vcf2fq -d 9 -D 56 | gzip > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/AUSturtle_1.fq.gz
+      
+seqtk subseq AUSturtle_1.fq.gz /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed > AUSturtle_1_confiavel.fq.gz  
+
+# Malaysia
+samtools mpileup -C50 -uf /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Informações/GCA_965140295.1_rLepOli2.hap1_genomic.fasta \
+/media/labgenoma5/Expansion/L.olivacea/paleomix/MLturtle_25.L.olivacearef.bam | bcftools call -c \
+| vcfutils.pl vcf2fq -d 4 -D 24 | gzip > /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PSMC/consenso/MLturtle_25.fq.gz   
+      
+seqtk subseq MLturtle_25.fq.gz /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed > MLturtle_25_confiavel.fq.gz 
