@@ -11,4 +11,77 @@ bcftools index L.olivacea_13_cromossomos.vcf.gz
 
 # Run PHLASH
 
-#
+## Start Python script
+import pandas as pd
+import phlash
+import numpy as np
+import argparse
+
+
+def main():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("pop_arg", help="Population name")
+    args = parser.parse_args()
+
+    fam = pd.read_csv(
+        "/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PHLASH/Todas_as_pops_acima_de_10.fam",
+        sep=r"\s+",
+        header=None,
+        names=["population", "sample"]
+    )
+
+    popmap = dict(zip(fam["sample"], fam["population"]))
+
+    samples = [
+        sample for sample, pop in popmap.items()
+        if pop == args.pop_arg
+    ]
+
+    print(samples)
+
+    vcf_path = "/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PHLASH/L.olivacea_13_cromossomos.vcf.gz"
+
+    chromosomes = [
+        "1:1-355274122", "2:1-272255920", "3:1-212433421", "4:1-150161704", "5:1-137258246", "6:1-131075015", "7:1-126826780", "8:1-109072606", "9:1-103789949", "10:1-85838826", "11:1-80733676", "12:1-43501221", "13:1-42056719", "14:1-46329096", "15:1-35482556", "16:1-28488247", "17:1-26183582", "18:1-30688577", "19:1-20304672", "20:1-22212431", "21:1-21257661", "22:1-21970794", "23:1-15285978", "24:1-19396635", "25:1-19974150", "26:1-19549198", "27:1-19522081", "28:1-7529980"
+    ]
+
+    contigs = []
+
+    for chrom in chromosomes:
+        print(f"Loading {chrom}...")
+        contigs.append(
+            phlash.contig(
+                vcf_path,
+                samples=samples,
+                region=chrom
+            )
+        )
+
+    results = phlash.fit(contigs, mutation_rate=1.2e-8)
+
+    times = np.array([dm.eta.t[1:] for dm in results])
+
+    T = np.geomspace(times.min(), times.max(), 1000)
+
+    Nes = np.array([dm.eta(T, Ne=True) for dm in results])
+
+    np.savetxt(
+        f"/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PHLASH/Atlantico/Nes_phlash_{args.pop_arg}.csv",
+        Nes,
+        delimiter=","
+    )
+
+    np.savetxt(
+        f"/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/PHLASH/Atlantico/Nes_phlash_{args.pop_arg}_Time.csv",
+        T,
+        delimiter=","
+    )
+
+
+if __name__ == "__main__":
+    main()
+
+## Final Python script
+
+# Other oceans ...
