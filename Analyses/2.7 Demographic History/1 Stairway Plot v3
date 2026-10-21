@@ -38,6 +38,10 @@ awk '{total += $3 - $2} END {print total}'  regioes_para_SFS.bed
 
 ################################################################ Ancestral allele inference ################################################################
 
+# Restrict the VCF to the genomic regions retained for SFS estimation
+bcftools view -R /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed \
+-Oz -o L.olivacea_21.vcf.gz L.olivacea_7.vcf.gz
+
 
 
 
