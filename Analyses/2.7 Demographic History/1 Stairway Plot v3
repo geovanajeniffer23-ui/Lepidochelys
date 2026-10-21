@@ -40,7 +40,18 @@ awk '{total += $3 - $2} END {print total}'  regioes_para_SFS.bed
 
 # Restrict the VCF to the genomic regions retained for SFS estimation
 bcftools view -R /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis.bed \
--Oz -o L.olivacea_21.vcf.gz L.olivacea_7.vcf.gz
+-Oz -o L.olivacea_14.vcf.gz L.olivacea_7.vcf.gz
+
+# Without missing data
+vcftools --gzvcf L.olivacea_14.vcf.gz \
+--out L.olivacea_14_missing \
+--max-missing 1.0 \
+--recode --recode-INFO-all
+
+rm L.olivacea_14.vcf.gz
+
+mv L.olivacea_14_missing.vcf.gz L.olivacea_14.vcf.gz
+
 
 
 
