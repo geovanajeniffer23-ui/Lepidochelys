@@ -1,24 +1,24 @@
 ################################################################ Heterozygosity ################################################################
 
 # Total heterozygosity
-vcftools --gzvcf L.olivacea_12.vcf.gz \
+vcftools --gzvcf L.olivacea_11.vcf.gz \
 --minDP 4 \
 --het \
---out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivacea_12_het_por_amostra
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivacea_11_het_por_amostra
 
 # Intergenic heterozygosity
-vcftools --gzvcf L.olivacea_12.vcf.gz \
+vcftools --gzvcf L.olivacea_11.vcf.gz \
 --minDP 4 \
 --bed /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis_intergênicas.bed \
 --het \
---out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivaceaa_12_intergenico_het_por_amostra
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivaceaa_11_intergenico_het_por_amostra
 
 # Genic heterozygosity
-vcftools --gzvcf L.olivacea_12.vcf.gz \
+vcftools --gzvcf L.olivacea_11.vcf.gz \
 --minDP 4 \
 --bed /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Regiões_confiáveis/regiões_confiáveis_gênicas.bed \
 --het \
---out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivaceaa_12_genico_het_por_amostra
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Heterogosidade/L.olivaceaa_11_genico_het_por_amostra
 
 # Download the .het files and upload each one to an Excel spreadsheet.
 # Calculate the difference between the number of sites recovered by the analysis (N_SITES) and the number of observed homozygous sites (O(HOM)).
@@ -63,16 +63,16 @@ wilcox.test(Pacifico_Genico, Indico_Het_Genico)
 
 # Generate the PLINK input file
 plink --allow-extra-chr \
---vcf L.olivacea_12.vcf.gz \
+--vcf L.olivacea_11.vcf.gz \
 --make-bed \
---out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/ROHs/L.olivacea_12 \
+--out /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/ROHs/L.olivacea_11 \
 --threads 10 \
 --memory 4000
 
 # Run the ROHs
-plink --bim L.olivacea_12.bim \
---bed L.olivacea_12.bed \
--fam L.olivacea_12.fam \
+plink --bim L.olivacea_11.bim \
+--bed L.olivacea_11.bed \
+-fam L.olivacea_11.fam \
 --allow-extra-chr --no-sex --no-parents --no-pheno \
 --homozyg-snp 20 \
 --homozyg-kb 50 \
@@ -80,14 +80,14 @@ plink --bim L.olivacea_12.bim \
 --homozyg-window-het 1 \
 --homozyg-window-missing 5 \
 --homozyg-window-threshold 0.01 \
---out L.olivacea_12_ROHs
+--out L.olivacea_11_ROHs
 
 ########## Classifying ROH by size ##########
 ## Start Python script
 
 import pandas as pd
 
-df = pd.read_csv("/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/ROHs/L.olivacea_12_ROHs.hom", delim_whitespace=True)
+df = pd.read_csv("/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/ROHs/L.olivacea_11_ROHs.hom", delim_whitespace=True)
 
 bins = [500, 1000, 2000, 5000, float('inf')]
 labels = ['500-1000', '1001-2000', '2001-5000', '>5001']
@@ -113,7 +113,7 @@ resultado_pivot = resultado.pivot_table(
 resultado_pivot.columns = [f"{metric}_{faixa}" for metric, faixa in resultado_pivot.columns]
 resultado_pivot = resultado_pivot.reset_index()
 
-resultado_pivot.to_csv("/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/ROHs/L.olivacea_12_ROHs_resumo_rohs_por_faixa.csv", index=False)
+resultado_pivot.to_csv("/media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/ROHs/L.olivacea_11_ROHs_resumo_rohs_por_faixa.csv", index=False)
 
 ## Final Python script
 
