@@ -150,21 +150,21 @@ mv L.olivacea_10_Pacifico_AC_AN_filtrado.vcf.gz L.olivacea_10_Pacifico.vcf.gz
 #Remove samples with coverage below 10×
 bcftools view \
 --samples ^Sample41,Sample54,Sample57,Sample61,Sample6,Sample21,Sample62,Sample10,Sample8,Sample27,Sample13 \
--Oz -o L.olivacea_12.vcf.gz L.olivacea_7.vcf.gz
+-Oz -o L.olivacea_11.vcf.gz L.olivacea_7.vcf.gz
 
 bcftools view -i 'AC>0 && AC<AN' \
   -Oz \
-  -o L.olivacea_12_AC_AN_filtrado.vcf.gz \
-   L.olivacea_12.vcf.gz
+  -o L.olivacea_11_AC_AN_filtrado.vcf.gz \
+   L.olivacea_11.vcf.gz
 
-rm L.olivacea_12.vcf.gz
+rm L.olivacea_11.vcf.gz
 
-mv L.olivacea_12_AC_AN_filtrado.vcf.gz L.olivacea_12.vcf.gz
+mv L.olivacea_11_AC_AN_filtrado.vcf.gz L.olivacea_11.vcf.gz
 
 ########################################  Filters to VCF 3 (Genetic Load)  ########################################
 
 #Missing
-vcftools --gzvcf L.olivacea_12.vcf.gz \
---out L.olivacea_13 \
+vcftools --gzvcf L.olivacea_11.vcf.gz \
+--out L.olivacea_12 \
 --max-missing 1.0 \
 --recode --recode-INFO-all
