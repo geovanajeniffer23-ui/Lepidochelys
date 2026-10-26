@@ -42,23 +42,23 @@ awk '{total += $3 - $2} END {print total}'  regioes_para_SFS.bed
 
 # Restrict the VCF to the genomic regions retained for SFS estimation
 bcftools view -R /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/Historia_Demografica/SFS/Filtro_de_cobertura/regioes_para_SFS.bed \
--Oz -o L.olivacea_14.vcf.gz L.olivacea_7.vcf.gz
+-Oz -o L.olivacea_13.vcf.gz L.olivacea_7.vcf.gz
 
 # Without missing data
-vcftools --gzvcf L.olivacea_14.vcf.gz \
---out L.olivacea_14_missing \
+vcftools --gzvcf L.olivacea_13.vcf.gz \
+--out L.olivacea_13_missing \
 --max-missing 1.0 \
 --recode --recode-INFO-all
 
-rm L.olivacea_14.vcf.gz
+rm L.olivacea_13.vcf.gz
 
-mv L.olivacea_14_missing.vcf L.olivacea_14.vcf
+mv L.olivacea_13_missing.vcf L.olivacea_13.vcf
 
 # Generating input files for the est-sfs software
 
 # Process the VCF file by converting genotypes of the target population (L. olivacea) in columns 10–57 and 60-61 into their corresponding alleles from columns 4 and 5,
 # and extracting columns 10–57 and 60-61, retaining only the genotype information before the first : in each sample column.
-grep -v "#" /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivacea_14.vcf | awk '{
+grep -v "#" /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivacea_13.vcf | awk '{
   for (i=10; i<=61; i++) {
     gsub(/0[\/|]0/, substr($4, 1, 1) "/" substr($4, 1, 1), $i);
     gsub(/1[\/|]1/, substr($5, 1, 1) "/" substr($5, 1, 1), $i);
@@ -81,7 +81,7 @@ grep -v "#" /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivace
 # Do the same with the 2 columns of the outgroups (OUT), but separately
 
 # L. kempii
-  grep -v "#" /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivacea_14.vcf  | awk '{
+  grep -v "#" /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivacea_13.vcf  | awk '{
   gsub(/0[\/|]0/, substr($4, 1, 1) "/" substr($4, 1, 1), $58);
   gsub(/1[\/|]1/, substr($5, 1, 1) "/" substr($5, 1, 1), $58);
   gsub(/0[\/|]1/, substr($4, 1, 1) "/" substr($5, 1, 1), $58);
@@ -96,7 +96,7 @@ grep -v "#" /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivace
   print A_count "," C_count "," G_count "," T_count; }' L.kempii_to_count.txt > L.kempii_base_counts.txt
 
 # C. caretta
-  grep -v "#" /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivacea_14.vcf | awk '{
+  grep -v "#" /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivacea_13.vcf | awk '{
   gsub(/0[\/|]0/, substr($4, 1, 1) "/" substr($4, 1, 1), $59);
   gsub(/1[\/|]1/, substr($5, 1, 1) "/" substr($5, 1, 1), $59);
   gsub(/0[\/|]1/, substr($4, 1, 1) "/" substr($5, 1, 1), $59);
@@ -152,7 +152,7 @@ LC_NUMERIC=C awk '
 
 # Generate a file containing the positions of the variants
 bcftools query -f '%CHROM\t%POS\n' \bcftools query -f '%CHROM\t%POS\n' \
-  /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivacea_14.vcf > positions.txt
+  /media/labgenoma5/DATAPART4/ortela/Mestrado_L.olivacea/VCF/L.olivacea_13.vcf > positions.txt
 
 # Combine with the ancestral allele inferred by est-sfs
 paste positions.txt ancestral_states.txt > ancestral_positions.txt  
