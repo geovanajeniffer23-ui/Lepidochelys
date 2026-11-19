@@ -58,7 +58,7 @@ def main():
             )
         )
 
-    results = phlash.fit(contigs, mutation_rate=1.2e-8)
+    results = phlash.fit(contigs, mutation_rate=1.2e-8, fold_sfs=False)
 
     times = np.array([dm.eta.t[1:] for dm in results])
 
